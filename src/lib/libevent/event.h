@@ -1213,4 +1213,14 @@ int evtag_unmarshal_timeval(struct evbuffer *evbuf, ev_uint32_t need_tag,
 }
 #endif
 
+#ifndef __OpenBSD__
+#ifndef EVENT_COMPAT_H
+#define EVENT_COMPAT_H
+
+void
+*recallocarray(void *, size_t, size_t, size_t);
+
+#endif
+#endif
+
 #endif /* _EVENT_H_ */
