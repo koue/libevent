@@ -1218,6 +1218,9 @@ int evtag_unmarshal_timeval(struct evbuffer *evbuf, ev_uint32_t need_tag,
 #define EVENT_COMPAT_H
 
 void
+*reallocarray(void *, size_t, size_t);
+
+void
 *recallocarray(void *, size_t, size_t, size_t);
 
 #endif
