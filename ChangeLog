@@ -7,6 +7,18 @@
 	  would leak data.  Problem originally reported by Alexey Sokolov
 	  and Uli Schlachter.  ok kettenis@
 
+2020-12-17 14:54  bluhm
+
+	* share/mk/bsd.regress.mk: Run setup_once targets in a sepearate
+	  block with headline before all other targets.  OK tb@
+
+2020-12-16 16:53  bluhm
+
+	* share/mk/bsd.regress.mk: When debugging tests, it is useful to
+	  see the target name and which output belongs to it.  Echo
+	  headline with regress target and empty line afterwards.  OK
+	  sthen@ tb@ OK claudio@
+
 2020-07-06 13:33  pirofti
 
 	* lib/libc/asr/asr.c: Add support for timeconting in userland.
@@ -57,6 +69,38 @@
 	  in this case.  Change all (most?) callers of syscalls to follow
 	  this better, and let's see if this strictness helps us in the
 	  future.
+
+2019-06-17 17:20  espie
+
+	* share/mk/bsd.regress.mk: add REGRESS_EXPECTED_FAILURES variable,
+	  for those tests that are expected to fail because they're not yet
+	  implemented.
+
+	  okay bluhm@
+
+2019-06-15 07:30  espie
+
+	* share/mk/bsd.regress.mk: simplify cleanup handling okay bluhm@
+
+2019-06-11 18:14  espie
+
+	* share/mk/bsd.regress.mk: make things slightly less insane: -
+	  actually use the ERRORS framework for REGRESS_LOG - put it at end
+	  of file, as best working (years of practice on bsd.port.mk) -
+	  actually use .SILENT - fix REGRESS_IGNORE_FAIL. Don't put a - in
+	  front of lines, but just don't error out as false on FAILED
+	  tests.  This finally allows ^C to actually interrupt a testsuite.
+	   - add one missing .PHONY (quite a few more for later)
+
+	  okay bluhm@
+
+2019-05-14 16:43  bluhm
+
+	* share/mk/bsd.regress.mk: Remove the REGRESS_MAXTIME feature from
+	  regress framework.  The timeout based on CPU seconds is pretty
+	  useless, most hanging tests sleep and do not spin.  The timeout
+	  could not be distinguished from failure.  Only 3 tests used it.
+	  OK anton@ schwarze@ cheloha@ otto@
 
 2019-05-08 17:33  tobias
 
@@ -124,12 +168,28 @@
 	* lib/libevent/min_heap.h: unfold some compound operations to make
 	  this easier to follow
 
+2018-12-03 22:30  bluhm
+
+	* share/mk/bsd.regress.mk: If a regress uses REGRESS_SKIP_TARGETS
+	  to skip part of its tests, print SKIPPED.  This helps to detect
+	  such incomplete tests.  OK anton@
+
 2018-10-22 17:31  krw
 
 	* lib/libc/asr/asr.c: More "explicitely" -> "explicitly" in various
 	  comments.
 
 	  ok guenther@ tb@ deraadt@
+
+2018-10-05 11:15  bluhm
+
+	* share/mk/bsd.regress.mk: Add regress variable to run setup once
+	  for all tests.  OK anton@ benno@
+
+2018-09-26 09:34  bluhm
+
+	* share/mk/bsd.regress.mk: Add variables for setup and cleanup of
+	  regression tests.  OK anton@ jca@ tb@ benno@
 
 2018-09-23 08:56  anton
 
@@ -166,6 +226,11 @@
 	  set when the functions returns.  fix issues spotted by claudio@.
 
 	  ok claudio@
+
+2018-01-15 20:38  bluhm
+
+	* share/mk/bsd.regress.mk: We have no deprecated regress variables
+	  in our tree.	Remove the compatibility layer.
 
 2017-08-01 14:57  schwarze
 
@@ -844,6 +909,12 @@
 	  event_msgx() adds a new line itself.	Do not print a double new
 	  line when EVENT_SHOW_METHOD is set.  OK nicm@
 
+2014-07-19 18:15  miod
+
+	* share/mk/bsd.regress.mk: Explicitely check the value of
+	  REGRESS_SKIP_SLOW rather than its emptyness, for it defaults to a
+	  non-empty value; Doug Hogan
+
 2014-05-08 21:43  deraadt
 
 	* lib/libc/stdlib/reallocarray.c: move reallocarray() to a seperate
@@ -924,6 +995,11 @@
 	  Much assistance in fixing userland issues from deraadt@ and tedu@
 	  and build assistance from todd@ and otto@
 
+2013-08-01 20:43  kettenis
+
+	* share/mk/bsd.regress.mk: Don't error out if there are no
+	  regression for a particular architecture in a subdirectory.
+
 2013-07-12 14:36  eric
 
 	* lib/libc/asr/: asr.c, asr_private.h: Make some symbols static and
@@ -931,6 +1007,13 @@
 	  third-party programs.
 
 	  suggested by sthen@, ok theo@
+
+2013-06-14 22:38  halex
+
+	* share/mk/bsd.regress.mk: introduce REGRESS_FAIL_EARLY to stop
+	  regression tests at first encountered failure
+
+	  ok phessler@ bluhm@
 
 2013-06-01 15:02  eric
 
@@ -1933,6 +2016,22 @@
 
 	* lib/libevent/kqueue.c: typo.	from marius@umich.edu via provos
 
+2002-09-02 19:56  avsm
+
+	* share/mk/bsd.regress.mk: - Precede internal bsd.regress.mk
+	  variables with a _ - Rename old variables to be easier to read,
+	  and deprecate old variables.	The old variables will still work,
+	  but emit warnings.  - REGRESS_SKIP_SLOW only needs to be
+	  non-empty now, not explicitly set to 'yes' - REGRESS_LOG can
+	  contain more than one file to append results to - ERRORS variable
+	  can be set in Makefile to emit warnings or indicate fatal errors.
+	   - Add REGRESS_MAIL variable which can be set to an email address
+	  to send results to.  Currently this only works for a full
+	  regression run, since art doesnt want partial run results - sync
+	  bsd.regress.mk(5) with these changes
+
+	  ok art@ , also looked over by miod@
+
 2002-07-21 19:31  ericj
 
 	* lib/libevent/Makefile:
@@ -1999,4 +2098,57 @@
 	  stamp-h.in, Makefile.am, acconfig.h: import libevent an event
 	  notification abstraction on top of select or kqueue supporting
 	  timeout and signal callsbacks, too.  okay deraadt@ millert@
+
+2002-02-17 01:10  marc
+
+	* share/mk/bsd.regress.mk: skip tests that require root
+	  (REGRESSROOTTARGETS) unless the user is root or SUDO is not
+	  empty.  OK art@
+
+2002-01-03 16:54  brad
+
+	* share/mk/bsd.regress.mk: use :L variable modifier
+
+2002-01-03 02:20  art
+
+	* share/mk/bsd.regress.mk: make regress the main target (now that
+	  dependencies are correct)
+
+2002-01-03 01:47  art
+
+	* share/mk/bsd.regress.mk: OpenBSD tag
+
+2002-01-03 01:46  art
+
+	* share/mk/bsd.regress.mk: s/timeout/possible timeout/ the test
+	  could simply fail.
+
+2002-01-03 01:01  art
+
+	* share/mk/bsd.regress.mk: Two new variables.	REGRESSSLOWTARGETS,
+	  contains a list of all regress targets that are slow.
+	  REGRESSSKIPSLOW, settable to "yes"/"no" (default is "no") when
+	  running    regress. Skips slow tests.
+
+	  (*for some arbitrary and very subjective value of "slow")
+
+2002-01-03 00:28  art
+
+	* share/mk/bsd.regress.mk: Support for a new variable
+	  REGRESSMAXTIME that sets the cpu time ulimit for tests. Needed
+	  for libc_r tests.  With some help from marc@
+
+2002-01-02 03:27  art
+
+	* share/mk/bsd.regress.mk: Eh? Why could I finish a make build with
+	  this 6 hours ago?
+
+2002-01-01 22:54  art
+
+	* share/mk/bsd.regress.mk: Start for a framework for regression
+	  tests. Simplifies the most common regress test targets, provides
+	  logging of success/failure and various minor features.
+
+	  Much Makefile magic from espie@ who thinks that my shell
+	  programming skills are "atrocious" (and I agree).
 
