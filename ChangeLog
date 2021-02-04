@@ -526,6 +526,12 @@
 	* lib/libevent/buffer.c: Include stdint.h, not limits.h to get
 	  SIZE_MAX.  OK guenther@
 
+2015-01-20 04:41  krw
+
+	* regress/lib/libevent/test-init.c: Missing $OpenBSD$'s.
+
+	  ok deraadt@
+
 2015-01-16 16:48  deraadt
 
 	* lib/libc/asr/asr.c: Move to the <limits.h> universe.	review by
@@ -1246,6 +1252,14 @@
 
 	  ok guenther deraadt
 
+2010-06-26 23:31  nicm
+
+	* regress/lib/libevent/: Makefile, event_regress.c, eventtest.c,
+	  test-eof.c, test-init.c, test-time.c, test-weof.c: New libevent
+	  regression tests from upstream.
+
+	  help and ok phessler
+
 2010-05-31 20:56  nicm
 
 	* lib/libevent/event.h: Hide the timeout_* macros under an
@@ -1317,6 +1331,24 @@
 	  http://levent.svn.sourceforge.net/viewvc/levent?view=rev&revision=1436
 	  ok gilles@
 
+2008-05-09 18:43  brad
+
+	* regress/lib/libevent/Makefile: Fix the include path passed via
+	  CFLAGS so that this will compile.. one too many ../ in the path.
+	  Somehow managed to get a symlink in the right spot that made this
+	  work as it was.
+
+	  Pointed out by david@
+
+2008-05-04 21:14  brad
+
+	* regress/lib/libevent/: Makefile, eventtest.c: Some additional
+	  tests.
+
+	  From the libevent SVN repo.
+
+	  ok millert@
+
 2008-05-02 18:26  brad
 
 	* lib/libevent/: evbuffer.c, event.3, event.c, event.h: - Use a
@@ -1347,12 +1379,21 @@
 
 2008-05-02 06:09  brad
 
-	* lib/libevent/: buffer.c, evdns.c, evdns.h, event-internal.h,
-	  event.3, event.c, event.h, event_tagging.c, evsignal.h, kqueue.c,
-	  log.h, poll.c, select.c, shlib_version, signal.c: Update to
-	  libevent 1.3e while retaining our local changes.
+	* lib/libevent/buffer.c, lib/libevent/evdns.c,
+	  lib/libevent/evdns.h, lib/libevent/event-internal.h,
+	  lib/libevent/event.3, lib/libevent/event.c, lib/libevent/event.h,
+	  lib/libevent/event_tagging.c, lib/libevent/evsignal.h,
+	  lib/libevent/kqueue.c, lib/libevent/log.h, lib/libevent/poll.c,
+	  lib/libevent/select.c, lib/libevent/shlib_version,
+	  lib/libevent/signal.c, regress/lib/libevent/eventtest.c: Update
+	  to libevent 1.3e while retaining our local changes.
 
 	  "No objection" millert@ "the diff looks and works fine" reyk@
+
+2007-09-19 02:06  todd
+
+	* regress/lib/libevent/eventtest.c: permit this to compile with gcc
+	  2.x ok cloder@
 
 2007-09-02 15:19  deraadt
 
@@ -1556,6 +1597,12 @@
 
 	  From libevent CVS
 
+2006-01-23 20:19  brad
+
+	* regress/lib/libevent/eventtest.c: add a buffered event test.
+
+	  From libevent CVS
+
 2006-01-23 20:18  brad
 
 	* lib/libevent/: Makefile, buffer.c, event.3, event.h,
@@ -1576,6 +1623,12 @@
 
 	  From libevent CVS
 
+2005-12-25 02:51  brad
+
+	* regress/lib/libevent/eventtest.c: add two more tests.
+
+	  From libevent CVS
+
 2005-12-20 02:15  brad
 
 	* lib/libevent/kqueue.c: do not remove kq inkernel flag before
@@ -1584,6 +1637,13 @@
 	  From libevent CVS
 
 	  ok deraadt@
+
+2005-12-18 03:57  brad
+
+	* regress/lib/libevent/eventtest.c: rename test functions with
+	  meaningful names instead of 1 2 3, etc.
+
+	  From libevent CVS
 
 2005-12-02 16:54  deraadt
 
@@ -1669,6 +1729,10 @@
 	* lib/libevent/event.3: - no need for .Pp before .Sh - sometime ->
 	  sometimes
 
+2005-04-22 01:28  brad
+
+	* regress/lib/libevent/eventtest.c: test event priorities.
+
 2005-04-22 01:10  brad
 
 	* lib/libevent/event.3: remove whitespace
@@ -1723,6 +1787,20 @@
 
 	* lib/libevent/event.3: authorative->authoritative
 
+2004-12-22 00:54  david
+
+	* regress/lib/libevent/eventtest.c: some
+	  -Wimplicit-function-declaration cleaning; ok millert@
+
+2004-11-25 16:48  brad
+
+	* regress/lib/libevent/eventtest.c: add regress test support for
+	  bufferevents
+
+	  From NetBSD
+
+	  ok markus@
+
 2004-06-20 17:45  markus
 
 	* lib/libevent/event.h: remove timeout_*() again; ok brad@
@@ -1744,6 +1822,11 @@
 
 	  ok markus@
 
+2004-01-05 19:23  markus
+
+	* regress/lib/libevent/eventtest.c: regress test for kqueue+EOF;
+	  marius aamodt eriksen
+
 2004-01-05 19:20  markus
 
 	* lib/libevent/kqueue.c: support NOTE_EOF; from marius aamodt
@@ -1755,8 +1838,14 @@
 
 2003-09-23 08:52  markus
 
-	* lib/libevent/: Makefile, event.3, poll.c: add support for
-	  poll(2); ok deraadt
+	* lib/libevent/Makefile, lib/libevent/event.3, lib/libevent/poll.c,
+	  regress/lib/libevent/Makefile: add support for poll(2); ok
+	  deraadt
+
+2003-07-31 21:48  deraadt
+
+	* regress/lib/libevent/eventtest.c: various cleanups; david says
+	  results are same
 
 2003-07-10 07:48  markus
 
@@ -1779,6 +1868,20 @@
 
 	* lib/libevent/: event.c, kqueue.c, select.c: constify constant
 	  structures; niels ok
+
+2003-06-19 14:32  markus
+
+	* regress/lib/libevent/Makefile: the test depend on ${PROG};
+	  noticed by david@, mickey@
+
+2003-06-16 14:14  markus
+
+	* regress/lib/libevent/Makefile: use bsd.regress.mk
+
+2003-06-15 16:34  mickey
+
+	* regress/lib/libevent/: Makefile, eventtest.c: libevent regress
+	  from niels
 
 2003-06-03 20:26  deraadt
 
