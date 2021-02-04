@@ -3,6 +3,7 @@ MK_PROFILE=	no
 LOCALBASE?=	/usr/local
 SHAREDIR?=	/usr/local
 LIB=		event
+SHLIB_NAME=	lib${SHLIB}.so
 LIBDIR=		${LOCALBASE}/lib
 INCSDIR=	${LOCALBASE}/include
 CFLAGS+=	-Werror -Wstrict-prototypes -I${.CURDIR} \
