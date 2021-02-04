@@ -1,3 +1,48 @@
+2021-01-06 19:54  otto
+
+	* lib/libc/asr/asr.c: Fix two issues related to thread private data
+	  in asr.  - setting up asr in single thread mode and then starting
+	  threads using asr   would lead to multiple threads sharing the
+	  same resolver.  - destruction of a thread that has been using asr
+	  would leak data.  Problem originally reported by Alexey Sokolov
+	  and Uli Schlachter.  ok kettenis@
+
+2020-07-06 13:33  pirofti
+
+	* lib/libc/asr/asr.c: Add support for timeconting in userland.
+
+	  This diff exposes parts of clock_gettime(2) and gettimeofday(2)
+	  to userland via libc eliberating processes from the need for a
+	  context switch everytime they want to count the passage of time.
+
+	  If a timecounter clock can be exposed to userland than it needs
+	  to set its tc_user member to a non-zero value. Tested with one or
+	  multiple counters per architecture.
+
+	  The timing data is shared through a pointer found in the new ELF
+	  auxiliary vector AUX_openbsd_timekeep containing timehands
+	  information that is frequently updated by the kernel.
+
+	  Timing differences between the last kernel update and the current
+	  time are adjusted in userland by the tc_get_timecount() function
+	  inside the MD usertc.c file.
+
+	  This permits a much more responsive environment, quite visible in
+	  browsers, office programs and gaming (apparently one is are able
+	  to fly in Minecraft now).
+
+	  Tested by robert@, sthen@, naddy@, kmos@, phessler@, and many
+	  others!
+
+	  OK from at least kettenis@, cheloha@, naddy@, sthen@
+
+2020-06-07 16:16  deraadt
+
+	* lib/libc/asr/: asr.c: In the libc resolver function asr_run(),
+	  clear the result buffer everytime, because there are callers who
+	  were inspecting unrelated fields.  discussion with eric, otto,
+	  solution from semarie this is errata 6.6/031_asr and 6.7/009_asr
+
 2019-10-24 05:57  otto
 
 	* include/asr.h, lib/libc/asr/asr.c: Allow the caller of asr
