@@ -1,3 +1,11 @@
+2021-03-18 11:16  claudio
+
+	* lib/libc/stdlib/recallocarray.c: Type-cast getpagesize() from int
+	  to size_t for the comparison with d.	getpagesize() will only
+	  return positive numbers (there is no negative page size system)
+	  and it can not fail.	Should fix some compiler warnings seen in
+	  -portable projects.  OK otto@
+
 2021-01-06 19:54  otto
 
 	* lib/libc/asr/asr.c: Fix two issues related to thread private data
