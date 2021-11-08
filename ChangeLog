@@ -1,3 +1,15 @@
+2021-11-05 13:08  kn
+
+	* lib/libc/asr/asr.c: Zap unused variables
+
+	  OK martijn
+
+2021-08-31 23:33  bluhm
+
+	* share/mk/bsd.regress.mk: Make include bsd.prog.mk is supporting
+	  PROGS for a while.  Allow multiple programs also in
+	  bsd.regress.mk for consistency.  OK anton@
+
 2021-03-18 11:16  claudio
 
 	* lib/libc/stdlib/recallocarray.c: Type-cast getpagesize() from int
