@@ -1,3 +1,54 @@
+2022-03-31 17:27  naddy
+
+	* lib/libevent/event.3: man pages: add missing commas between
+	  subordinate and main clauses
+
+	  jmc@ dislikes a comma before "then" in a conditional, so leave
+	  those untouched.
+
+	  ok jmc@
+
+2022-01-20 14:18  naddy
+
+	* lib/libc/asr/asr.c: remove unused variable from all copies of
+	  _asr_strdname()
+
+	  ... including those inlined into print_dname().  This also fixes
+	  -Wunused-but-set-variable warnings warnings in smtpd and smtpctl.
+	   The code was imported with asr and then copied around.
+
+	  ok deraadt@ guenther@
+
+2021-11-22 20:18  jca
+
+	* lib/libc/asr/asr.c: Implement rfc6840 (AD flag processing) if
+	  using trusted name servers
+
+	  libc can't do DNSSEC validation but it can ask a "security-aware"
+	  resolver to do so.  Let's send queries with the AD flag set when
+	  appropriate, and let applications look at the AD flag in
+	  responses in a safe way, ie clear the AD flag if the resolvers
+	  aren't trusted.  By default we only trust resolvers if
+	  resolv.conf(5) only lists name servers on localhost - the obvious
+	  candidates being unwind(8) and unbound(8).  For non-localhost
+	  resolvers, an admin who trusts *all the name servers* listed in
+	  resolv.conf(5) *and the network path leading to them* can
+	  annotate this with "options trust-ad".
+
+	  AD flag processing gives ssh -o VerifyHostkeyDNS=Yes a chance to
+	  fetch SSHFP records in a secure manner, and tightens the
+	  situation for other applications, eg those using RES_USE_DNSSEC
+	  for DANE.  It should be noted that postfix currently assumes
+	  trusted name servers by default and forces RES_TRUSTAD if
+	  available.
+
+	  RES_TRUSTAD and "options trust-ad" were first introduced in glibc
+	  by Florian Weimer.  Florian Obser (florian@) contributed various
+	  improvements, fixed a bug and added automatic trust for name
+	  servers on localhost.
+
+	  ok florian@ phessler@
+
 2021-11-05 13:08  kn
 
 	* lib/libc/asr/asr.c: Zap unused variables
