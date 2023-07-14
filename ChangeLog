@@ -1,3 +1,198 @@
+2023-05-01 07:04  jsg
+
+	* lib/libevent/event_set_log_callback.3: spelling
+
+2023-04-29 15:38  schwarze
+
+	* lib/libevent/event_set_log_callback.3: New manual page written by
+	  Ted Bullock, dropping the empty RETURN VALUES section and adding
+	  the missing "#include <stdilib.h>" below EXAMPLES.
+
+2023-04-29 13:37  schwarze
+
+	* lib/libevent/event_set.3: Provide function prototypes for macros
+	  that take arguments, rename the "ev" argument to "event" to make
+	  some text read better, and get rid of colons at the ends of list
+	  tags.
+
+	  OK jmc@ and Ted Bullock.
+
+2023-04-28 17:31  schwarze
+
+	* lib/libevent/event_base_new.3: Some wording tweaks to finish the
+	  polishing.  While here, also correct the HISTORY section.  OK
+	  jmc@
+
+2023-04-27 16:48  schwarze
+
+	* lib/libevent/event_set.3: tiny wording tweak from Ted Bullock to
+	  make misunderstandings less likely; OK jmc@
+
+2023-04-27 16:10  schwarze
+
+	* lib/libevent/event_base_loop.3: various markup tweaks, no content
+	  change; OK jmc@
+
+2023-04-27 15:44  schwarze
+
+	* lib/libevent/event_set.3: various minor content corrections and
+	  improvements; feedback and OK jmc@ and Ted Bullock
+
+2023-04-26 18:56  schwarze
+
+	* lib/libevent/event_set.3: New manual page written by Ted Bullock
+	  <tbullock at comlore dot com>, to start working on it in the
+	  tree.
+
+2023-04-25 17:57  schwarze
+
+	* lib/libevent/event_base_new.3: Put ERRORS and DIAGNOSTICS
+	  information in the sections where they belong.  More details on
+	  RETURN VALUES and ERRORS.  Document all DIAGNOSTICS messages
+	  except the various malloc(3)-related ones and except those that
+	  cannot actually occur but would merely report violations of
+	  internal invariants.	Shorten some wordings in this section.
+
+	  Using feedback from jmc@ and Ted Bullock.  OK jmc@ and nicm@ on
+	  an earlier version.
+
+2023-04-17 04:46  jsg
+
+	* lib/libevent/event_base_loop.3: fix double word
+
+2023-04-10 13:40  schwarze
+
+	* lib/libevent/event_base_loop.3: Various wording tweaks for
+	  clarity and precision, and a few for conciseness.  OK jmc@ and
+	  Ted Bullock
+
+2023-04-10 13:32  schwarze
+
+	* lib/libevent/event_base_new.3: More deduplication: talk about
+	  environment variable in one place, not two.  Clarify that the
+	  variables only affect the event_base structure currently being
+	  created.  They do not disable "library support" as a whole.  Sort
+	  the variables alphabetically.
+
+	  OK jmc@ and Ted Bullock
+
+2023-04-09 14:43  schwarze
+
+	* lib/libevent/event_base_loop.3: Trim some redundant and a bit of
+	  misleading text: 1. The values of #define'd constants are part of
+	  the ABI, but not of the API.	Programmers need not worry about
+	  them and must not rely on them.  Consequently, do not list these
+	  values in the SYNOPSIS.  2. libevent can be used for any event
+	  loop, not only for the main loop of a program.  3. No need to
+	  state numbers of arguments, they are obvious from the SYNOPSIS.
+	  4. If a function is documented to require a pointer to a specific
+	  kind of object as an argument, there is no need to say passing
+	  NULL is undefined.  OK jmc@ and Ted Bullock
+
+2023-04-09 14:30  schwarze
+
+	* lib/libevent/event_base_new.3: Explain what it means that an API
+	  function "requires event_init(3)" in one place, not in two
+	  places, reducing duplication of text.
+
+	  Joint work with Ted Bullock.	OK jmc@.
+
+2023-04-08 16:21  schwarze
+
+	* lib/libevent/event_base_loop.3: New manual page written by Ted
+	  Bullock <tbullock at comlore dot com>, providing more information
+	  and in a more systematic way than the current event(3) manual
+	  page.  Not yet linked to the tree.
+
+	  Using input from nicm@ and jmc@.
+
+2023-04-06 20:52  schwarze
+
+	* lib/libevent/event_base_new.3: Fix two documentation bugs: 1. The
+	  function event_base_free(3) does reset the global variable to the
+	  initial state when needed.  2. The CAVEATS section got the issue
+	  backwards: multiple threads per base cause trouble, whereas
+	  multiples bases per thread do not.
+
+	  While here, also avoid the plural when talking about the global
+	  variable used by event_init(3): there is only one.
+
+	  Using input from jmc@ and from Ted Bullock.
+
+2023-04-05 18:34  schwarze
+
+	* lib/libevent/event_base_new.3: Import the first of the new
+	  libevent manual pages written by Ted Bullock <tbullock at comlore
+	  dot com> in order to polish it in the tree.  Not yet linked to
+	  the build.
+
+	  In particular, this documents the so far undocumented functions
+	  event_base_new(3) and event_reinit(3) and provides lots of new
+	  information regarding event_init(3) and event_base_free(3).
+
+	  Also using input from nicm@, jmc@, and myself, OK nicm@ jmc@.
+
+2022-12-27 23:05  jmc
+
+	* lib/libevent/: buffer.c, event.c, kqueue.c: spelling fixes; from
+	  paul tagliamonte ok nicm
+
+2022-12-09 09:30  tb
+
+	* share/mk/bsd.regress.mk: Allow overriding default run-regress-*
+	  targets
+
+	  Overriding a default run-regress-* target with custom commands is
+	  already possible and done by many tests. The fact that it
+	  currently works depends on behavior in the BUGs section of
+	  make.1, however. The fix is not to add commands if the target is
+	  already defined with commands.
+
+	  tested by anton correct fix from espie, ok anton
+
+2022-11-17 17:39  florian
+
+	* lib/libc/asr/asr_private.h: Restrict what getaddrinfo(3) is
+	  willing to try to resolve.
+
+	  Programs assume that a successful call to getaddrinfo(3)
+	  validates the input as "safe", but that's not true. Characters
+	  like '$', '`', '\n' or '*' can traverse the DNS without problems,
+	  but have special meaning, for example a shell.
+
+	  There is a function res_hnok() already in libc, but it validates
+	  if a string is a host name, which is too strict in practice. For
+	  example foo-.example.com is not a valid host name, but is used on
+	  the Internet.
+
+	  Posix has this to say: "The getaddrinfo() function shall
+	  translate the name of a service location (for example, a host
+	  name)"
+
+	  It hints that the input should be a host name, but it does not
+	  restrict it to it.
+
+	  This introduces a function hnok_lenient() which restricts the
+	  input to getaddrinfo(3) to the set [A-z0-9-_.]. Additionally two
+	  consecutive dots ('.') are not allowed nor can the string start
+	  with - or '.'.
+
+	  glibc introduced a similar restriction years ago, so this should
+	  not cause problems.
+
+	  It has been known in the DNS community for years, probably
+	  decades that getaddrinfo(3) is too lenient what it accepts, but
+	  it has always been kicked down the road as "not a DNS problem".
+	  Unfortunately this information never made it out of the DNS
+	  community and no coordinated effort happened to have this
+	  addressed in operating systems.
+
+	  David Leadbeater recently demonstrated how ssh(1) and ftp(1) are
+	  too trusting with what getaddrinfo(3) accepts. Both have been
+	  fixed independently of this.
+
+	  Input deraadt, eric OK millert, deraadt
+
 2022-03-31 17:27  naddy
 
 	* lib/libevent/event.3: man pages: add missing commas between
