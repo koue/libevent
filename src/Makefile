@@ -1,3 +1,3 @@
-SUBDIR= lib regress/lib/libevent
+SUBDIR= lib
 
 .include <bsd.subdir.mk>
