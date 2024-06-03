@@ -1,3 +1,68 @@
+2024-03-23 22:51  yasuoka
+
+	* lib/libevent/kqueue.c: In kq_del(), delete matching EV_ADD
+	  entries to prevent libevent from passing both EV_ADD and
+	  EV_DELETE for the same fd to kevent().
+
+	  ok visa
+
+2023-11-20 12:15  florian
+
+	* lib/libc/asr/asr_private.h: localhost is either 127.0.0.1 or ::1,
+	  nothing else.
+
+	  RFC 6761, 6.3 Domain Name Reservation Considerations for
+	  "localhost.":    3.  Name resolution APIs and libraries SHOULD
+	  recognize localhost	     names as special and SHOULD always
+	  return the IP loopback address	for address queries and
+	  negative responses for all other query	types.	Name
+	  resolution APIs SHOULD NOT send queries for	     localhost
+	  names to their configured caching DNS server(s).
+
+	  This makes sure that the getaddrinfo(3) and gethostbyname(3)
+	  family of functions always return the loopback address and do not
+	  send queries to name servers. This includes "localhost",
+	  "localhost." and everything under ".localhost" and ".localhost.".
+
+	  For example, a host underneath the .com.ar zone will per default
+	  have a search list of "com.ar.". resolv.conf(5) has a default of
+	  "lookup bind file". Both combined will result in lookups for
+	  "localhost" to not return 127.0.0.1 because localhost.com.ar is
+	  registered in DNS.
+
+	  It has been known for decades that this is a problem, especially
+	  for localhost.
+
+	  Problem recently spotted by gonzalo@ and debugged by sthen@
+
+	  Testing sthen, gonzalo Input & OK phessler, eric, millert OK
+	  sthen, kn, deraadt
+
+2023-09-24 08:28  tb
+
+	* share/mk/bsd.regress.mk: Make REGRESS_LOG more useful again
+
+	  Enabling REGRESS_FAIL_EARLY made REGRESS_LOG error out at the
+	  first error, which is pointless. So default to no if REGRESS_LOG
+	  is set unless the user explicitly enabled it.
+
+	  Requested by claudio ok bluhm
+
+2023-09-15 07:13  tb
+
+	* share/mk/bsd.regress.mk: Default REGRESS_FAIL_EARLY to yes
+
+	  The current fail open behavior may be desirable in some
+	  circumstances, but it is an unexpected and dangerous default
+	  since one expects some kind of feedback when running a test
+	  suite. Currently failing tests are only visible on inspecting the
+	  log, which led to unsuspecting people missing failures several
+	  times in the past. Flip the default to fail closed. For those
+	  that want to have the old behavior, it is easy enough to set the
+	  variable to no.
+
+	  Positive feedback job and schwarze ok kn
+
 2023-05-01 07:04  jsg
 
 	* lib/libevent/event_set_log_callback.3: spelling
